@@ -2,13 +2,16 @@ FROM alpine
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash alpine-sdk
+    apk add bash alpine-sdk shadow
 
 RUN addgroup -g 2000 builder && \
-    adduser -D -u 2001 -G builder builder
+    adduser -D -u 2001 -G builder builder && \
+    usermod -a -G abuild builder
 USER builder
 
-RUN cd ~ && git clone https://github.com/polyverse/aports.git
+WORKDIR /home/builder
+RUN abuild-keygen -a -n
+RUN git clone --progress https://github.com/polyverse/aports.git
 
 ENTRYPOINT ["/bin/bash"]
 
