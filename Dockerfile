@@ -2,7 +2,7 @@ FROM alpine
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash alpine-sdk shadow
+    apk add bash alpine-sdk shadow xz
 
 RUN addgroup -g 2000 builder && \
     adduser -D -u 2001 -G builder builder && \
