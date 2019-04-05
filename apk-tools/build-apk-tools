@@ -1,3 +1,18 @@
 #!/bin/bash
 
+echo "Compressing /pwd/apk-tools into apk-tools-local.tar.xz ..."
+tar cfJ ~/apk-tools-local.tar.xz -C /pwd apk-tools
+
+echo "Replacing apk tools source tarball in APKBUILD at: ~/aports/main/apk-tools/"
+
+if [[ ! -f ~/aports/main/apk-tools/APKBUILD.bak ]]; then
+	echo "==> Backing up ~/aports/main/apk-tools/APKBUILD to ~/aports/main/apk-tools/APKBUILD.bak only once..."
+	cp ~/aports/main/apk-tools/APKBUILD ~/aports/main/apk-tools/APKBUILD.bak
+fi
+
+echo "==> Copying modified APKBUILD in place"
+cp /pwd/APKBUILD ~/aports/main/apk-tools/APKBUILD
+
+echo "==> Building and installing modified apk-tools"
+abuild -r
 
