@@ -5,7 +5,7 @@ echo "Pulling latest polyverse/alpine-dev"
 docker pull polyverse/alpine-dev
 
 echo "Building polyverse/alpine-dev-apk-tools:$headsha..."
-docker build -t polyverse/alpine-dev-apk-tools:$headsha
+docker build -t polyverse/alpine-dev-apk-tools:$headsha .
 
 docker tag polyverse/alpine-dev-apk-tools:$headsha polyverse/alpine-dev-apk-tools:latest
 docker push polyverse/alpine-dev-apk-tools:$headsha
