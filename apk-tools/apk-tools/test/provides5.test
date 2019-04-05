@@ -1,0 +1,11 @@
+@ARGS
+--test-repo provides.repo
+add server-a server-b
+@EXPECT
+ERROR: unsatisfiable constraints:
+  server-a-1:
+    conflicts: server-b-1[theservice=1]
+    satisfies: world[server-a]
+  server-b-1:
+    conflicts: server-a-1[theservice=2]
+    satisfies: world[server-b]

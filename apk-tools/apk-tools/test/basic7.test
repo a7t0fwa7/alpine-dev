@@ -1,0 +1,8 @@
+@ARGS
+--no-network
+--test-repo basic.repo
+--test-instdb basic.installed
+--test-world a
+upgrade
+@EXPECT
+OK: 0 MiB in 2 packages

@@ -1,0 +1,7 @@
+@ARGS
+--test-repo complicated1.repo
+add a nonexistant
+@EXPECT
+ERROR: unsatisfiable constraints:
+  nonexistant (missing):
+    required by: world[nonexistant]
