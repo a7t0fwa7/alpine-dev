@@ -49,7 +49,7 @@ char **apk_argv;
 
 static void version(void)
 {
-	printf("apk-tools " APK_VERSION ", compiled for " APK_DEFAULT_ARCH ".\n"
+	printf("apk-tools " APK_VERSION ", modified by polyverse, compiled for " APK_DEFAULT_ARCH ".\n"
 #ifdef TEST_MODE
 		"TEST MODE BUILD. NOT FOR PRODUCTION USE.\n"
 #endif

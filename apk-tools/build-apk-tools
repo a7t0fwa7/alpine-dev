@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Compressing /apk-tools/apk-tools into apk-tools-local.tar.xz ..."
-tar cfJ ~/aports/main/apk-tools/apk-tools-local.tar.xz -C /apk-tools apk-tools
+tar cfJ ~/aports/main/apk-tools/apk-tools-2.10.3.tar.xz -C /apk-tools apk-tools-2.10.3
 
 echo "Replacing apk tools source tarball in APKBUILD at: ~/aports/main/apk-tools/"
 
