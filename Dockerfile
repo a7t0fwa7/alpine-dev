@@ -13,7 +13,9 @@ RUN addgroup -g 1000 sudo && \
 USER builder
 
 WORKDIR /home/builder
-RUN abuild-keygen -a -n
+RUN abuild-keygen -a -n && \
+    sudo cp /home/builder/.abuild/*.rsa.pub /etc/apk/keys
+
 RUN git clone --progress https://github.com/polyverse/aports.git
 
 ENTRYPOINT ["/bin/bash"]
