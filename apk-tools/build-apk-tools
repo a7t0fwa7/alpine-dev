@@ -18,3 +18,9 @@ opwd="$PWD"
 cd ~/aports/main/apk-tools
 abuild checksum && abuild -ri
 cd "$opwd"
+
+echo "==> Installing built repositories..."
+sudo cp repositories /etc/apk
+
+echo "==> Updating and upgrading packages..."
+sudo apk update && sudo apk upgrade
