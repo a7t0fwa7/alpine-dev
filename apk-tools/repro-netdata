@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo "Reproducing py2-psycopg2 issue exact as seen by netdata..."
+echo "==> Installing py2-psycopg2 from upstream..."
+sudo apk update && sudo apk upgrade
+sudo apk add py2-psycopg2
+
+echo "Pointing Polyverse repos to staging..."
+echo "52.88.110.206 repo.polyverse.io" | sudo tee -a /etc/hosts
+
+echo "Executing Polyverse installation just as Netdata did..."
+sudo apk update && sudo apk upgrade; 
+curl https://sh.polyverse.io | sudo sh -s install gcxce5byVQbtRz0iwfGkozZwy support+netdata@polyverse.io; 
+if [ $? -eq 0 ]; then 
+	sudo apk update && \
+	sudo apk upgrade --available --no-cache && \
+	sudo sed -in 's/^#//g' /etc/apk/repositories; 
+fi 
+
