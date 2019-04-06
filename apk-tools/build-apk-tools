@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Compressing /apk-tools/apk-tools into apk-tools-local.tar.xz ..."
-tar cfJ ~/apk-tools-local.tar.xz -C /apk-tools apk-tools
+tar cfJ ~/aports/main/apk-tools/apk-tools-local.tar.xz -C /apk-tools apk-tools
 
 echo "Replacing apk tools source tarball in APKBUILD at: ~/aports/main/apk-tools/"
 
@@ -14,5 +14,7 @@ echo "==> Copying modified APKBUILD in place"
 cp /apk-tools/APKBUILD ~/aports/main/apk-tools/APKBUILD
 
 echo "==> Building and installing modified apk-tools"
-abuild -r
-
+opwd="$PWD"
+cd ~/aports/main/apk-tools
+abuild checksum && abuild -ri
+cd "$opwd"
