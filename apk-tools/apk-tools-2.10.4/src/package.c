@@ -549,7 +549,10 @@ int apk_sign_ctx_process_file(struct apk_sign_ctx *ctx,
 			return -ENOMSG;
 		/* Error out early if identity part is missing */
 		if (ctx->action == APK_SIGN_VERIFY_IDENTITY)
+		{
+			apk_error("apk_sign_ctx_process_file: APKv1 compatibility identity part missing. (Filename: %s)", fi->name);
 			return -EKEYREJECTED;
+		}
 		ctx->data_started = 1;
 		ctx->control_started = 1;
 		r = check_signing_key_trust(ctx);
@@ -660,7 +663,10 @@ int apk_sign_ctx_mpart_cb(void *ctx, int part, apk_blob_t data)
 	/* Still in signature blocks? */
 	if (!sctx->control_started) {
 		if (part == APK_MPART_END)
+		{
+			apk_error("apk_sign_ctx_mpart_cb: In signature block, APK_MPART_END found.");
 			return -EKEYREJECTED;
+		}
 		goto reset_digest;
 	}
 
@@ -685,7 +691,10 @@ int apk_sign_ctx_mpart_cb(void *ctx, int part, apk_blob_t data)
 		if (EVP_MD_CTX_size(sctx->mdctx) == 0 ||
 		    memcmp(calculated, sctx->data_checksum,
 		           EVP_MD_CTX_size(sctx->mdctx)) != 0)
+		{
+			apk_error("apk_sign_ctx_mpart_cb: End of control block, checking control hash/signature... failed.");
 			return -EKEYREJECTED;
+		}
 		sctx->data_verified = 1;
 		if (!(apk_flags & APK_ALLOW_UNTRUSTED) &&
 		    !sctx->control_verified)
@@ -706,7 +715,10 @@ int apk_sign_ctx_mpart_cb(void *ctx, int part, apk_blob_t data)
 				sctx->signature.data.len,
 				sctx->signature.pkey);
 			if (r != 1 && !(apk_flags & APK_ALLOW_UNTRUSTED))
+			{
+				apk_error("apk_sign_ctx_mpart_cb: No signature found, and not allowing untrusted.");
 				return -EKEYREJECTED;
+			}
 		} else {
 			r = 0;
 			if (!(apk_flags & APK_ALLOW_UNTRUSTED))
@@ -727,7 +739,10 @@ int apk_sign_ctx_mpart_cb(void *ctx, int part, apk_blob_t data)
 		EVP_DigestFinal_ex(sctx->mdctx, calculated, NULL);
 		if (memcmp(calculated, sctx->identity.data,
 			   sctx->identity.type) != 0)
+		{
+			apk_error("apk_sign_ctx_mpart_cb: Reset digest for hashing data.");
 			return -EKEYREJECTED;
+		}
 		sctx->control_verified = 1;
 		if (!sctx->has_data_checksum && part == APK_MPART_END)
 			sctx->data_verified = 1;
@@ -930,6 +945,7 @@ int apk_pkg_read(struct apk_database *db, const char *file,
 	ctx.db = db;
 	ctx.pkg->size = fi.size;
 
+    printf("Processing APK file: %s\n", file);
 	tar = apk_bstream_gunzip_mpart(bs, apk_sign_ctx_mpart_cb, sctx);
 	r = apk_tar_parse(tar, read_info_entry, &ctx, FALSE, &db->id_cache);
 	apk_istream_close(tar);
